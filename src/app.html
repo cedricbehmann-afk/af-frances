@@ -54,6 +54,34 @@ button{font:inherit;color:inherit;border:0;cursor:pointer}
 @keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
 .fb{min-height:74px;margin-top:14px;font-weight:800;font-size:16px;text-align:center;display:flex;flex-direction:column;gap:10px;justify-content:center}
 .grow{flex:1}
+.coco{overflow:visible;filter:drop-shadow(0 6px 0 rgba(184,19,111,.14));display:inline-block;vertical-align:middle;flex:none}
+.coco *{transform-box:view-box}
+.coco .eh,.coco .m1,.coco .m2,.coco .cv{display:none}
+.coco .hd{transform-origin:100px 140px;animation:chd 1.7s ease-in-out infinite alternate}
+.coco .ey{transform-origin:100px 80px;animation:cbl 4s infinite}
+.coco .bw{transform-origin:138px 36px;animation:cbw 1.2s ease-in-out infinite alternate}
+.coco .tl{transform-origin:134px 190px;animation:ctl .9s ease-in-out infinite alternate}
+.coco .aL{transform-origin:70px 150px}.coco .aR{transform-origin:130px 150px}
+@keyframes chd{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
+@keyframes cbl{0%,91%,100%{transform:scaleY(1)}95%{transform:scaleY(.08)}}
+@keyframes cbw{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+@keyframes ctl{from{transform:rotate(-8deg)}to{transform:rotate(10deg)}}
+.coco.happy{animation:cjump .28s ease-out infinite alternate}
+.coco.party{animation:cparty .9s ease-in-out infinite}
+@keyframes cjump{to{transform:translateY(-9%)}}
+@keyframes cparty{0%,100%{transform:translateY(0) rotate(-7deg)}25%{transform:translateY(-12%) rotate(0)}50%{transform:translateY(0) rotate(7deg)}75%{transform:translateY(-12%) rotate(0)}}
+.coco.happy .ey,.coco.party .ey,.coco.happy .m0,.coco.party .m0,.coco.sad .m0,.coco.sad .aL,.coco.sad .aR{display:none}
+.coco.happy .eh,.coco.party .eh,.coco.happy .m1,.coco.party .m1,.coco.sad .m2,.coco.sad .cv{display:block}
+.coco.happy .aL,.coco.party .aL{animation:cwl .25s ease-in-out infinite alternate}
+.coco.happy .aR,.coco.party .aR{animation:cwr .25s ease-in-out infinite alternate}
+@keyframes cwl{from{transform:rotate(92deg)}to{transform:rotate(122deg)}}
+@keyframes cwr{from{transform:rotate(-92deg)}to{transform:rotate(-122deg)}}
+.coco.sad{animation:csad 1.4s ease-in-out infinite alternate}.coco.sad .hd{animation:none}
+@keyframes csad{from{transform:rotate(-2deg)}to{transform:rotate(2deg) translateY(2%)}}
+.pop{display:inline-block;animation:gpop 1.7s ease-in-out infinite}
+@keyframes gpop{0%,55%,100%{transform:rotate(0) scale(1)}8%,24%,40%{transform:rotate(-13deg)}16%,32%,48%{transform:rotate(13deg)}70%{transform:scale(1.35)}}
+@media (prefers-reduced-motion:reduce){.coco,.coco *,.pop,.mk{animation:none!important}}
+
 .gift{width:100%;background:#fff;border-radius:20px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 0 var(--soft);text-align:left}
 .gift .ge{font-size:38px}.gift .gt{flex:1;min-width:0}.gift b.n{display:block;font-size:15px;margin-bottom:6px}.gift small{font-weight:700;font-size:12.5px;color:var(--deep)}
 .tier{background:#fff;border-radius:22px;padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 0 var(--soft)}
@@ -76,7 +104,26 @@ select{font:inherit;font-weight:800;color:var(--deep);background:var(--bg);borde
 <script>
 /*DATA*/
 const $=s=>document.querySelector(s),app=$('#app');
-const MK='<div class="mk">🐵<i>🎀</i></div>',MKS='<div class="mk sm">🐵<i>🎀</i></div>';
+const B='#8B5A3C',F='#F2C9A0',K='#3A1F14';
+function coco(st,size){return `<svg class="coco ${st}" width="${size}" viewBox="0 0 200 222" aria-hidden="true">
+<path class="tl" d="M134 190 q46 6 41 -36 q-3 -22 -22 -13" fill="none" stroke="${B}" stroke-width="10" stroke-linecap="round"/>
+<ellipse cx="82" cy="209" rx="17" ry="10" fill="${F}"/><ellipse cx="118" cy="209" rx="17" ry="10" fill="${F}"/>
+<ellipse cx="100" cy="172" rx="38" ry="36" fill="${B}"/><ellipse cx="100" cy="179" rx="23" ry="23" fill="${F}"/>
+<g class="aL"><path d="M70 150 L48 184" stroke="${B}" stroke-width="14" stroke-linecap="round"/><circle cx="46" cy="187" r="10" fill="${F}"/></g>
+<g class="aR"><path d="M130 150 L152 184" stroke="${B}" stroke-width="14" stroke-linecap="round"/><circle cx="154" cy="187" r="10" fill="${F}"/></g>
+<g class="hd"><circle cx="42" cy="84" r="23" fill="${B}"/><circle cx="42" cy="84" r="12" fill="${F}"/><circle cx="158" cy="84" r="23" fill="${B}"/><circle cx="158" cy="84" r="12" fill="${F}"/>
+<circle cx="100" cy="86" r="58" fill="${B}"/><circle cx="80" cy="78" r="27" fill="${F}"/><circle cx="120" cy="78" r="27" fill="${F}"/><ellipse cx="100" cy="106" rx="38" ry="28" fill="${F}"/>
+<circle cx="63" cy="105" r="9" fill="#FF8FC0" opacity=".75"/><circle cx="137" cy="105" r="9" fill="#FF8FC0" opacity=".75"/>
+<g class="ey"><ellipse cx="80" cy="81" rx="7.5" ry="9.5" fill="${K}"/><circle cx="82.5" cy="77.5" r="2.6" fill="#fff"/><ellipse cx="120" cy="81" rx="7.5" ry="9.5" fill="${K}"/><circle cx="122.5" cy="77.5" r="2.6" fill="#fff"/>
+<path d="M72 73 l-6 -4 M75 69 l-3 -6 M128 73 l6 -4 M125 69 l3 -6" stroke="${K}" stroke-width="2.6" stroke-linecap="round"/></g>
+<g class="eh" fill="none" stroke="${K}" stroke-width="4.5" stroke-linecap="round"><path d="M71 84 q9 -12 18 0"/><path d="M111 84 q9 -12 18 0"/></g>
+<ellipse cx="96" cy="98" rx="2" ry="1.6" fill="${K}"/><ellipse cx="104" cy="98" rx="2" ry="1.6" fill="${K}"/>
+<path class="m0" d="M86 109 Q100 122 114 109" fill="none" stroke="${K}" stroke-width="4" stroke-linecap="round"/>
+<g class="m1"><path d="M83 107 Q100 135 117 107 Z" fill="#7A1F3D"/><path d="M92 120 Q100 128 108 120 Q100 115 92 120Z" fill="#FF7AA8"/></g>
+<path class="m2" d="M88 119 Q100 109 112 119" fill="none" stroke="${K}" stroke-width="4" stroke-linecap="round"/>
+<g transform="rotate(18 138 36)"><g class="bw"><path d="M138 36 L110 19 Q103 36 110 53 Z" fill="#FF2E93"/><path d="M138 36 L166 19 Q173 36 166 53 Z" fill="#FF2E93"/><circle cx="138" cy="36" r="8.5" fill="#B8136F"/></g></g></g>
+<g class="cv"><path d="M70 150 Q46 118 76 88" fill="none" stroke="${B}" stroke-width="14" stroke-linecap="round"/><path d="M130 150 Q154 118 124 88" fill="none" stroke="${B}" stroke-width="14" stroke-linecap="round"/><ellipse cx="80" cy="82" rx="16" ry="12" fill="${F}"/><ellipse cx="120" cy="82" rx="16" ry="12" fill="${F}"/></g></svg>`}
+const MK=coco('idle',170),MKS=coco('idle',84);
 const day=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return day(d)};
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
@@ -102,7 +149,7 @@ function regalos(){
   app.innerHTML=`<div class="top"><button class="x" data-a="home">←</button><h1>Mis regalos 🎁</h1><div class="pill">⭐ ${nf(S.pts)}</div></div>
   <div class="bub" style="margin:16px auto 0;text-align:center">Cada punto te acerca a un regalo de tu gordito… ¿Qué hay adentro? Sorpresa 🤫 Solo te digo que cada uno es más grande que el anterior 😍</div>
   <div class="list">${G.map((g,i)=>{const ok=S.pts>=g.p,cl=S.claimed.includes(i);
-    return `<div class="tier${ok?'':' lock'}"><span class="ge" style="font-size:${26+i*10}px">${g.em}</span><span class="gt"><b>${esc(g.es)}</b><span>${ok?(cl?'✔ Ya se lo pediste':'¡Desbloqueado! 🎉'):'🔒 '+nf(g.p)+' ⭐ · te faltan '+nf(g.p-S.pts)}</span>${ok&&!cl?`<br><a class="mini" data-a="claim" data-i="${i}" href="https://wa.me/?text=${encodeURIComponent('Mon amour, j\'ai gagné '+g.fr+' '+g.em)}" target="_blank" rel="noopener">Pedírselo a mi gordito 💌</a>`:''}</span></div>`}).join('')}</div>
+    return `<div class="tier${ok?'':' lock'}"><span class="ge${ok&&!cl?' pop':''}" style="font-size:${26+i*10}px">${g.em}</span><span class="gt"><b>${esc(g.es)}</b><span>${ok?(cl?'✔ Ya se lo pediste':'¡Desbloqueado! 🎉'):'🔒 '+nf(g.p)+' ⭐ · te faltan '+nf(g.p-S.pts)}</span>${ok&&!cl?`<br><a class="mini" data-a="claim" data-i="${i}" href="https://wa.me/?text=${encodeURIComponent('Mon amour, j\'ai gagné '+g.fr+' '+g.em)}" target="_blank" rel="noopener">Pedírselo a mi gordito 💌</a>`:''}</span></div>`}).join('')}</div>
   <div class="note">⭐ <b>¿Cómo gano puntos?</b><br>+10 por cada respuesta buena a la primera<br>+50 por terminar tu rondita<br>+ un bono por tu racha 🔥 (¡no la rompas!)</div>`;scrollTo(0,0)}
 // ---------- audio ----------
 const blobs={};let frVoice=null;
@@ -173,9 +220,9 @@ function answer(i){
   const ok=s.o[i]===s.w,bt=[...document.querySelectorAll('.opt')];
   bt.forEach((b,j)=>{if(s.o[j]===s.w)b.classList.add('ok');else if(j===i)b.classList.add('no');else b.classList.add('dim')});
   if(s.k==='B'||!ok)say(s.w);
-  if(ok){if(!s.re)Q.pts+=10;$('#fb').innerHTML=`<div>${rnd(OKQ)}${s.re?'':' <span style="color:var(--pink)">+10 ⭐</span>'}</div>`;setTimeout(()=>{Q.i++;step()},s.k==='B'?1500:950)}
+  if(ok){if(!s.re)Q.pts+=10;$('#fb').innerHTML=`<div style="display:flex;align-items:center;justify-content:center;gap:10px;text-align:left">${coco('happy',62)}<span>${rnd(OKQ)}${s.re?'':' <span style="color:var(--pink)">+10 ⭐</span>'}</span></div>`;setTimeout(()=>{Q.i++;step()},s.k==='B'?1500:950)}
   else{Q.bad.add(s.w.id);if(!s.re)Q.steps.push({t:'q',k:s.k,w:s.w,re:1});
-    $('#fb').innerHTML=`<div>${rnd(NOQ)}<br><span style="color:var(--deep)">${esc(s.w.fr)} = ${esc(s.w.es)}</span></div><button class="btn" data-a="next">Seguir</button>`}}
+    $('#fb').innerHTML=`<div style="display:flex;align-items:center;justify-content:center;gap:10px;text-align:left">${coco('sad',62)}<span>${rnd(NOQ)}<br><span style="color:var(--deep)">${esc(s.w.fr)} = ${esc(s.w.es)}</span></span></div><button class="btn" data-a="next">Seguir</button>`}}
 function finish(){
   const t=day(),GAP=[1,2,4,7,14,30];
   Q.ws.forEach(w=>{const c=S.w[w.id]||{box:-1};c.box=Q.bad.has(w.id)?0:Math.min(c.box+1,5);c.due=addDays(GAP[c.box]);S.w[w.id]=c});
@@ -188,8 +235,8 @@ function finish(){
   const p=P[S.ph],n=learned().length;window._cur={t:'end',w:p};preload([p]);
   app.innerHTML=`<div class="conf">${Array.from({length:22},(_,i)=>`<i style="left:${Math.random()*100}%;animation-duration:${2+Math.random()*2.5}s;animation-delay:${Math.random()*.8}s">${rnd(['💖','✨','🎀','🍌','👑'])}</i>`).join('')}</div>
   <div class="top"><h1>¡Listo! 🎉</h1><div style="display:flex;gap:8px"><div class="pill">🔥 ${S.streak}</div><div class="pill">⭐ ${nf(S.pts)}</div></div></div>
-  <div class="plus">${gain?`+${gain} ⭐`:'Ya ganaste todos tus puntos de hoy ⭐'}</div>${won?`<button class="gift" data-a="regalos" style="margin-top:10px;border:3px solid var(--pink)"><span class="ge">${won.em}</span><span class="gt"><b class="n">🎉 ¡Regalo desbloqueado!</b><small style="font-size:15px">${esc(won.es)} — toca para pedírselo</small></span></button>`:''}
-  <div style="text-align:center;margin-top:10px">${MKS}</div><div class="bub" style="margin:8px auto 0;text-align:center">${rnd(JOKES)}</div>
+  <div class="plus">${gain?`+${gain} ⭐`:'Ya ganaste todos tus puntos de hoy ⭐'}</div>${won?`<button class="gift" data-a="regalos" style="margin-top:10px;border:3px solid var(--pink)"><span class="ge pop">${won.em}</span><span class="gt"><b class="n">🎉 ¡Regalo desbloqueado!</b><small style="font-size:15px">${esc(won.es)} — toca para pedírselo</small></span></button>`:''}
+  <div style="text-align:center;margin-top:10px">${coco('party',104)}</div><div class="bub" style="margin:8px auto 0;text-align:center">${rnd(JOKES)}</div>
   <div class="card"><div class="q">Frase del día para tu gordito 💌</div><div class="fr" style="font-size:28px">${esc(p.fr)}</div><div class="es" style="font-size:17px">${esc(p.es)}</div><button class="snd" data-a="say">🔊</button></div>
   <div class="stack"><a class="btn wa" href="https://wa.me/?text=${encodeURIComponent(p.fr)}" target="_blank" rel="noopener">Mandársela por WhatsApp 💬</a><button class="btn alt" data-a="home">Volver</button></div>`}
 function report(){try{fetch('/api/done',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({day:day(),streak:S.streak,learned:learned().length,total:W.length,pts:S.pts}),keepalive:true}).catch(()=>{})}catch(e){}}
