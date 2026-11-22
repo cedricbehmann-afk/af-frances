@@ -8,3 +8,5 @@ Appli pour apprendre le français (Worker Cloudflare, un seul fichier). Chaque p
 - `node build.mjs <version> && cp dist/worker.js worker.js` : régénère `worker.js`
 - `/api/config` renvoie la version en ligne
 - Contenu écrit : niveaux 1 et 2 (252 mots, 186 phrases). Niveaux 3 à 6 à ajouter à la suite dans `W` et `SEN`, sans changer l'ordre existant.
+
+- `public/v/<id>.mp3` : la voix de chaque mot et phrase (fichiers statiques). Voix : modèle Piper `fr_FR-siwis-medium` (jeu de données SIWIS, licence CC BY 4.0). Pour un nouveau mot sans fichier, l'appli retombe sur la voix du téléphone.

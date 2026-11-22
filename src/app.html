@@ -159,28 +159,27 @@ function regalos(){
     return `<div class="tier${ok||ex?'':' lock'}"><span class="ge${(ok&&!cl)||ex?' pop':''}" style="font-size:${26+i*10}px">${g.em}</span><span class="gt"><b>${esc(g.es)}</b><span>${ok?(cl?'✔ Ya se lo pediste':'¡Ganado! 🎉'):ex?'¡Examen listo! 🎓':'🔒 '+nf(g.p)+' palabras + examen'+(i===S.lv?' · te faltan '+nf(Math.max(0,g.p-n)):'')}</span>${ok&&!cl?`<br><a class="mini" data-a="claim" data-i="${i}" href="${waGift(i)}" target="_blank" rel="noopener">Pedírselo a mi gordito 💌</a>`:ex?'<br><button class="mini" data-a="exam" style="background:var(--pink);box-shadow:0 3px 0 var(--deep)">Hacer el examen 🎓</button>':''}</span></div>`}).join('')}</div>
   <div class="note">🎁 <b>¿Cómo gano un regalo?</b><br>1. Aprende las palabras del nivel (6 nuevas al día)<br>2. Pasa el examen: entender frases en francés<br>3. Pídele tu regalo a tu gordito 💌<br><br>⭐ <b>Tus puntos:</b> +10 por respuesta buena, +50 por rondita y un bono por tu racha 🔥</div>`;scrollTo(0,0)}
 // ---------- audio ----------
-const blobs={};let frVoice=null;
+// Voz grabada (archivos /v/<id>.mp3): suena en cualquier teléfono, aunque no tenga voz francesa instalada.
+const AU=new Audio();AU.preload='auto';let frVoice=null,sayN=0;
 function pickVoice(){const v=(window.speechSynthesis?speechSynthesis.getVoices():[]).filter(v=>/^fr/i.test(v.lang));frVoice=v.find(v=>/fr[-_]FR/i.test(v.lang))||v[0]||null}
 if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
 const clean=t=>t.replace(/[^\p{L}\p{N}\s'’?!….,-]/gu,'').trim();
+function tts(o){if(!window.speechSynthesis)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(clean(o.fr));u.lang='fr-FR';if(frVoice)u.voice=frVoice;u.rate=.8;speechSynthesis.speak(u)}catch(e){}}
 async function say(o){
-  try{
-    if(CFG.voices.includes(o.id)){
-      if(!blobs[o.id]){const r=await fetch('/api/voice/'+o.id);if(!r.ok)throw 0;blobs[o.id]=URL.createObjectURL(await r.blob())}
-      const a=new Audio(blobs[o.id]);await a.play();return}
-  }catch(e){}
-  if(!window.speechSynthesis)return;
-  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(clean(o.fr));u.lang='fr-FR';if(frVoice)u.voice=frVoice;u.rate=.8;speechSynthesis.speak(u)}
-// preload his voice for the words of a session so playback stays inside the tap
-function preload(ws){ws.forEach(o=>{if(CFG.voices.includes(o.id)&&!blobs[o.id])fetch('/api/voice/'+o.id).then(r=>r.ok?r.blob():0).then(b=>{if(b)blobs[o.id]=URL.createObjectURL(b)}).catch(()=>{})})}
+  const n=++sayN;
+  try{AU.pause();AU.src='/v/'+o.id+'.mp3';await AU.play()}
+  catch(e){if(n===sayN&&e&&e.name!=='AbortError')tts(o)}}
+function preload(ws){ws.forEach(o=>{try{fetch('/v/'+o.id+'.mp3').catch(()=>{})}catch(e){}})}
 // ---------- home ----------
 const iOS=/iphone|ipad|ipod/i.test(navigator.userAgent),standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+let instEv=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();instEv=e;if(!Q||Q.i>=Q.steps.length)home()});
 function banner(){
+  const inst=instEv&&!standalone?'<button class="btn alt" data-a="install">📲 Instalar la app<small>Para tenerla en tu pantalla</small></button>':'';
   if(iOS&&!standalone)return `<div class="note">📲 <b>Pon a Coco en tu pantalla</b> (así te llegan los avisos):<br>1. Toca <b>Compartir</b> (el cuadrito con la flecha ↑) abajo en Safari<br>2. Elige <b>«Añadir a pantalla de inicio»</b><br>3. Abre la app desde el ícono rosado <b>AF</b> 🎀</div>`;
-  if(!('Notification'in window)||!('serviceWorker'in navigator))return '';
-  if(Notification.permission==='default')return `<button class="btn alt" data-a="push">🔔 Activar avisos<small>Un solo mensajito al día, prometido</small></button>`;
+  if(!('Notification'in window)||!('serviceWorker'in navigator))return inst;
+  if(Notification.permission==='default')return `<button class="btn alt" data-a="push">🔔 Activar avisos<small>Un solo mensajito al día, prometido</small></button>`+inst;
   if(Notification.permission==='denied')return `<div class="note">🔕 Los avisos están apagados. Actívalos en Ajustes → Notificaciones → AF.</div>`;
-  return ''}
+  return inst}
 function home(){
   const n=learned().length,done=S.last===day(),first=!n;
   const msg=first?'¡Hola, Ana! Soy <b>Coco</b>. Tu gordito me mandó a enseñarte francés 💖<br>Cinco minuticos al día y ya.':
@@ -262,7 +261,7 @@ function finish(){
 function exam(){
   if(!canExam())return home();
   const l=S.lv+1,n=l===LV.length?20:10,pick=shuf(examPool(l)).slice(0,n);
-  Q={steps:pick.map((w,i)=>({t:'q',k:i%3===2&&window.speechSynthesis?'L':'S',w})),i:0,ws:[],bad:new Set(),mode:'exam',pts:0,ok:0,need:Math.ceil(n*.8),lvl:l};step()}
+  Q={steps:pick.map((w,i)=>({t:'q',k:i%3===2?'L':'S',w})),i:0,ws:[],bad:new Set(),mode:'exam',pts:0,ok:0,need:Math.ceil(n*.8),lvl:l};step()}
 function examEnd(){
   const pass=Q.ok>=Q.need,n=Q.steps.length,l=Q.lvl;window._cur=null;
   if(pass){S.lv=l;S.pts+=100;save();report()}
@@ -323,6 +322,7 @@ app.addEventListener('click',async e=>{
   else if(a==='words')words()
   else if(a==='avisos')avisos()
   else if(a==='regalos')regalos()
+  else if(a==='install'){if(instEv){instEv.prompt();instEv=null;setTimeout(home,800)}}
   else if(a==='exam')exam()
   else if(a==='claim'){const i=+b.dataset.i;if(!S.claimed.includes(i)){S.claimed.push(i);save()}setTimeout(home,600)}
   else if(a==='savesch')saveSch()

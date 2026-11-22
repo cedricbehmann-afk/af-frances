@@ -3,6 +3,10 @@ main = "worker.js"
 compatibility_date = "2025-01-01"
 workers_dev = true
 
+[assets]
+directory = "./public"
+binding = "ASSETS"
+
 [[kv_namespaces]]
 binding = "KV"
 id = "224d996eeaa64c088ee3f5319bcfd130"
