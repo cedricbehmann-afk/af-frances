@@ -49,7 +49,7 @@ export default{
     if(p==="/sw.js")return new Response(SW_JS,{headers:{"content-type":"text/javascript","cache-control":"no-cache"}});
     if(p==="/manifest.webmanifest")return new Response(MANIFEST,{headers:{"content-type":"application/manifest+json"}});
     if(ICONS[p])return new Response(unb64(ICONS[p]),{headers:{"content-type":"image/png","cache-control":"public, max-age=86400"}});
-    if(p==="/api/config")return json({vapid:VAPID_PUBLIC,voices:Object.keys(VOICES)});
+    if(p==="/api/config")return json({vapid:VAPID_PUBLIC,voices:Object.keys(VOICES),version:"v3-coco-anime"});
     if(p==="/api/subscribe"&&m==="POST"){
       const s=await req.json();if(!s||!/^https:\/\//.test(s.endpoint||""))return json({error:"bad"},400);
       const subs=(await getJ(env,"subs",[])).filter(x=>x.endpoint!==s.endpoint);subs.push({endpoint:s.endpoint,at:Date.now()});
