@@ -129,7 +129,7 @@ const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return day(d)};
 const rnd=a=>a[Math.floor(Math.random()*a.length)];
 const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
 const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-let S={w:{},streak:0,last:'',ph:0,phDay:'',best:0,pts:0,ptsDay:'',ptsToday:0,claimed:[]};
+let S={w:{},streak:0,last:'',ph:0,phDay:'',best:0,pts:0,ptsDay:'',ptsToday:0,claimed:[],lv:0,s:{}};
 try{S=Object.assign(S,JSON.parse(localStorage.getItem('coco')||'{}'))}catch(e){}
 const save=()=>{try{localStorage.setItem('coco',JSON.stringify(S))}catch(e){}};
 const learned=()=>W.filter(w=>S.w[w.id]);
@@ -137,20 +137,27 @@ let CFG={vapid:'',voices:[]};
 const OKQ=['¡Eso, mi reina! 👑','¡Guau! Coco aplaude con las patas 🐵','¡Más lista que un mono con dos guineos! 🍌','¡Perfecto! Tu gordito va a presumir 😎','¡Oui oui oui! ✨','¡Ni Coco lo dice tan bonito! 💖'];
 const NOQ=['Ups… hasta Coco se resbala con la cáscara 🍌','Casi, casi 🙈 ¡la próxima es tuya!','Tranquila, a Coco le tomó 3 años decir «banane» 🐒','No pasa nada, mi amor. Otra vez 💪'];
 const JOKES=['¿Qué hace un mono en la escuela? ¡Monerías! 🙊','Coco dice: «Hablar francés es fácil… ¡lo difícil es pelar el guineo con guantes!» 🍌','¿Cuál es el colmo de un mono? Que le digan «¡qué mono!» y no entienda 🙈','Coco ya le contó a toda la selva lo bien que vas 🌴'];
-// ---------- regalos (cada vez más grandes) ----------
-const G=[300,800,1800,3500,6000,10000].map((p,i)=>({p,em:'🎁',es:'Regalo sorpresa nº '+(i+1),fr:'mon cadeau surprise numéro '+(i+1)}));
-const DAYCAP=250,nf=n=>String(n).replace(/\B(?=(\d{3})+$)/g,',');
+// ---------- niveles y regalos (cada vez más grandes) ----------
+const LV=[100,250,500,800,1150,1500],PER=6,DAYCAP=450,nf=n=>String(n).replace(/\B(?=(\d{3})+$)/g,',');
+const G=LV.map((p,i)=>({p,em:'🎁',es:'Regalo sorpresa nº '+(i+1),fr:'mon cadeau surprise numéro '+(i+1)}));
+const slv=d=>LV.findIndex(p=>(d-1)*PER<p)+1;               // nivel de una frase según su día
+const examPool=l=>l===LV.length?SEN:SEN.filter(x=>slv(x.d)===l);
+const canExam=()=>S.lv<LV.length&&learned().length>=LV[S.lv]&&examPool(S.lv+1).length>=10;
+const waGift=i=>`https://wa.me/?text=${encodeURIComponent('Mon amour, j\'ai gagné '+G[i].fr+' 🎁')}`;
 function giftBar(){
-  const i=G.findIndex(g=>S.pts<g.p);if(i<0)return `<button class="gift" data-a="regalos"><span class="ge">👑</span><span class="gt"><b class="n">¡Ganaste todos los regalos!</b><small>Míralos aquí</small></span></button>`;
-  const g=G[i],a=i?G[i-1].p:0,pend=G.filter((x,j)=>S.pts>=x.p&&!S.claimed.includes(j)).length;
-  return `<button class="gift" data-a="regalos"><span class="ge">${g.em}</span><span class="gt"><b class="n">${pend?'🎉 ¡Tienes un regalo por pedir!':'Próximo regalo sorpresa 🤫'}</b><div class="bar"><b style="width:${Math.max(4,Math.round((S.pts-a)/(g.p-a)*100))}%"></b></div><small>Te faltan ${nf(g.p-S.pts)} ⭐</small></span></button>`}
+  const i=S.lv,n=learned().length;
+  if(G.some((x,j)=>j<i&&!S.claimed.includes(j)))return `<button class="gift" data-a="regalos" style="border:3px solid var(--pink)"><span class="ge pop">🎁</span><span class="gt"><b class="n">🎉 ¡Tienes un regalo por pedir!</b><small>Toca para pedírselo a tu gordito</small></span></button>`;
+  if(i>=LV.length)return `<button class="gift" data-a="regalos"><span class="ge">👑</span><span class="gt"><b class="n">¡Ganaste todos los regalos!</b><small>Míralos aquí</small></span></button>`;
+  if(canExam())return `<button class="gift" data-a="exam" style="border:3px solid var(--pink)"><span class="ge pop">🎁</span><span class="gt"><b class="n">🎓 ¡Examen del regalo nº ${i+1} listo!</b><small>${i+1===LV.length?20:10} frases · necesitas ${i+1===LV.length?16:8} buenas</small></span></button>`;
+  const a=i?LV[i-1]:0,need=LV[i],out=n>=W.length;
+  return `<button class="gift" data-a="regalos"><span class="ge">🎁</span><span class="gt"><b class="n">Regalo sorpresa nº ${i+1} 🤫</b><div class="bar"><b style="width:${Math.max(4,Math.min(100,Math.round((n-a)/(need-a)*100)))}%"></b></div><small>${out?'Coco está preparando palabras nuevas 🐵':'Te faltan '+nf(need-n)+' palabras para el examen'}</small></span></button>`}
 function regalos(){
-  window._cur=null;
+  window._cur=null;const n=learned().length;
   app.innerHTML=`<div class="top"><button class="x" data-a="home">←</button><h1>Mis regalos 🎁</h1><div class="pill">⭐ ${nf(S.pts)}</div></div>
-  <div class="bub" style="margin:16px auto 0;text-align:center">Cada punto te acerca a un regalo de tu gordito… ¿Qué hay adentro? Sorpresa 🤫 Solo te digo que cada uno es más grande que el anterior 😍</div>
-  <div class="list">${G.map((g,i)=>{const ok=S.pts>=g.p,cl=S.claimed.includes(i);
-    return `<div class="tier${ok?'':' lock'}"><span class="ge${ok&&!cl?' pop':''}" style="font-size:${26+i*10}px">${g.em}</span><span class="gt"><b>${esc(g.es)}</b><span>${ok?(cl?'✔ Ya se lo pediste':'¡Desbloqueado! 🎉'):'🔒 '+nf(g.p)+' ⭐ · te faltan '+nf(g.p-S.pts)}</span>${ok&&!cl?`<br><a class="mini" data-a="claim" data-i="${i}" href="https://wa.me/?text=${encodeURIComponent('Mon amour, j\'ai gagné '+g.fr+' '+g.em)}" target="_blank" rel="noopener">Pedírselo a mi gordito 💌</a>`:''}</span></div>`}).join('')}</div>
-  <div class="note">⭐ <b>¿Cómo gano puntos?</b><br>+10 por cada respuesta buena a la primera<br>+50 por terminar tu rondita<br>+ un bono por tu racha 🔥 (¡no la rompas!)</div>`;scrollTo(0,0)}
+  <div class="bub" style="margin:16px auto 0;text-align:center">¿Qué hay adentro? Sorpresa 🤫 Cada regalo es más grande que el anterior… y con el último ya entiendes casi todo en francés 😍</div>
+  <div class="list">${G.map((g,i)=>{const ok=i<S.lv,cl=S.claimed.includes(i),ex=i===S.lv&&canExam();
+    return `<div class="tier${ok||ex?'':' lock'}"><span class="ge${(ok&&!cl)||ex?' pop':''}" style="font-size:${26+i*10}px">${g.em}</span><span class="gt"><b>${esc(g.es)}</b><span>${ok?(cl?'✔ Ya se lo pediste':'¡Ganado! 🎉'):ex?'¡Examen listo! 🎓':'🔒 '+nf(g.p)+' palabras + examen'+(i===S.lv?' · te faltan '+nf(Math.max(0,g.p-n)):'')}</span>${ok&&!cl?`<br><a class="mini" data-a="claim" data-i="${i}" href="${waGift(i)}" target="_blank" rel="noopener">Pedírselo a mi gordito 💌</a>`:ex?'<br><button class="mini" data-a="exam" style="background:var(--pink);box-shadow:0 3px 0 var(--deep)">Hacer el examen 🎓</button>':''}</span></div>`}).join('')}</div>
+  <div class="note">🎁 <b>¿Cómo gano un regalo?</b><br>1. Aprende las palabras del nivel (6 nuevas al día)<br>2. Pasa el examen: entender frases en francés<br>3. Pídele tu regalo a tu gordito 💌<br><br>⭐ <b>Tus puntos:</b> +10 por respuesta buena, +50 por rondita y un bono por tu racha 🔥</div>`;scrollTo(0,0)}
 // ---------- audio ----------
 const blobs={};let frVoice=null;
 function pickVoice(){const v=(window.speechSynthesis?speechSynthesis.getVoices():[]).filter(v=>/^fr/i.test(v.lang));frVoice=v.find(v=>/fr[-_]FR/i.test(v.lang))||v[0]||null}
@@ -176,35 +183,40 @@ function banner(){
   return ''}
 function home(){
   const n=learned().length,done=S.last===day(),first=!n;
-  const msg=first?'¡Hola, Ana! Soy <b>Coco</b>. Tu gordito me mandó a enseñarte francés 💖<br>Dos minuticos al día y ya.':
+  const msg=first?'¡Hola, Ana! Soy <b>Coco</b>. Tu gordito me mandó a enseñarte francés 💖<br>Cinco minuticos al día y ya.':
     done?'¡Ya cumpliste hoy, mi reina! 👑<br>Nos vemos mañana… o juega otra si te quedaste con ganas.':
-    rnd(['¡Llegaste! Coco ya tiene tus 3 palabritas de hoy ✨','Dos minuticos y a lo tuyo, mi amor 💅','Hoy vas a dejar a tu gordito con la boca abierta 😘']);
+    n>=W.length?'Hoy toca repasito y frases 💅 Coco está preparando palabras nuevas para ti.':
+    rnd(['¡Llegaste! Coco ya tiene tus 6 palabritas de hoy ✨','Cinco minuticos y a lo tuyo, mi amor 💅','Hoy vas a dejar a tu gordito con la boca abierta 😘']);
   app.innerHTML=`<div class="top"><h1 style="display:flex;align-items:center;gap:10px"><span class="af">AF</span><span style="font-size:17px">Francés con Coco</span></h1><div style="display:flex;gap:8px"><div class="pill">🔥 ${S.streak||0}</div><div class="pill">⭐ ${nf(S.pts)}</div></div></div>
   <div class="hero">${MK}<div class="bub">${msg}</div></div>
-  <div class="stack">${giftBar()}${done?`<button class="btn" data-a="play" data-m="rev">Otra rondita 🔁<small>Repaso rápido</small></button>${n<W.length?'<button class="link" data-a="play" data-m="more">Quiero 3 palabras nuevas más</button>':''}`
-   :`<button class="btn" data-a="play" data-m="day">${first?'Empezar':'Jugar'} 💖<small>2 minuticos</small></button>`}
+  <div class="stack">${giftBar()}${done?`<button class="btn" data-a="play" data-m="rev">Otra rondita 🔁<small>Repaso rápido</small></button>${n<W.length?'<button class="link" data-a="play" data-m="more">Quiero más palabras nuevas</button>':''}`
+   :`<button class="btn" data-a="play" data-m="day">${first?'Empezar':'Jugar'} 💖<small>5 minuticos</small></button>`}
   ${banner()}<div style="display:flex;justify-content:center;gap:6px">${n?'<button class="link" data-a="words">Mis palabras 💎</button>':''}${canPush()?'<button class="link" data-a="avisos">Mis avisos 🔔</button>':''}</div></div>`}
 // ---------- session ----------
 let Q=null;
 function build(mode){
   const seen=learned(),t=day();
-  let nw=mode==='rev'?[]:W.filter(w=>!S.w[w.id]).slice(0,3);
+  let nw=mode==='rev'?[]:W.filter(w=>!S.w[w.id]).slice(0,PER);
   const due=seen.slice().sort((a,b)=>(S.w[a.id].due>t)-(S.w[b.id].due>t)||S.w[a.id].box-S.w[b.id].box||(S.w[a.id].due<S.w[b.id].due?-1:1));
-  const rv=due.slice(0,nw.length?2:5);
+  const rv=due.slice(0,nw.length?4:10);
   const steps=[];
   nw.forEach(w=>{steps.push({t:'i',w});steps.push({t:'q',k:'A',w})});
   const mix=[];nw.forEach(w=>mix.push({t:'q',k:'B',w}));
   rv.forEach(w=>{mix.push({t:'q',k:rnd(['C','B','A']),w})});
-  if(!nw.length)rv.forEach(w=>mix.push({t:'q',k:'A',w}));
   steps.push(...shuf(mix));
+  // frases: solo las de los días que ya lleva (contando las palabras de hoy), primero las menos vistas
+  const dd=Math.ceil((seen.length+nw.length)/PER);
+  const sen=shuf(SEN.filter(x=>x.d<=dd)).sort((a,b)=>(S.s[a.id]||0)-(S.s[b.id]||0)).slice(0,nw.length?3:4);
+  sen.forEach(w=>steps.push({t:'q',k:'S',w}));
   Q={steps,i:0,total:steps.length,ws:[...nw,...rv],bad:new Set(),mode,pts:0};preload(Q.ws)}
 function opts(w,k){
-  const idx=W.indexOf(w),lim=Math.max(12,learned().length+6);
+  if(k==='S'||k==='L'){const i=SEN.indexOf(w),near=SEN.filter((x,j)=>x!==w&&x.es!==w.es&&Math.abs(j-i)<=14);return shuf([w,...shuf(near).slice(0,3)])}
+  const lim=Math.max(12,learned().length+6);
   const pool=W.slice(0,lim).filter(x=>x!==w&&x.es!==w.es&&x.fr!==w.fr);
   return shuf([w,...shuf(pool).slice(0,3)])}
-function head(){return `<div class="top"><button class="x" data-a="quit">✕</button><div class="bar"><b style="width:${Math.round(Q.i/Q.steps.length*100)}%"></b></div></div>`}
+function head(){return `<div class="top"><button class="x" data-a="quit">✕</button><div class="bar"><b style="width:${Math.round(Q.i/Q.steps.length*100)}%"></b></div>${Q.mode==='exam'?`<div class="pill">🎓 ${Q.ok}/${Q.need}</div>`:''}</div>`}
 function step(){
-  if(Q.i>=Q.steps.length)return finish();
+  if(Q.i>=Q.steps.length)return Q.mode==='exam'?examEnd():finish();
   const s=Q.steps[Q.i],w=s.w;window._cur=s;
   if(s.t==='i'){
     app.innerHTML=head()+`<div class="grow"><div class="card"><div class="q">Palabra nueva ✨</div><div class="big">${w.em}</div><div class="fr">${esc(w.fr)}</div><div class="es">${esc(w.es)}</div><div class="pr">se dice «${esc(w.pr)}»</div><br><button class="snd" data-a="say">🔊</button></div></div><button class="btn" data-a="next">¡La tengo! 💅</button>`;
@@ -212,33 +224,55 @@ function step(){
   const o=opts(w,s.k);s.o=o;
   const prompt=s.k==='A'?`<div class="q">¿Qué significa?</div><div class="fr">${esc(w.fr)}</div><button class="snd" data-a="say">🔊</button>`:
     s.k==='B'?`<div class="q">¿Cómo se dice en francés?</div><div class="big">${w.em}</div><div class="es">${esc(w.es)}</div>`:
-    `<div class="q">Escucha y elige 👂</div><button class="snd" data-a="say" style="width:92px;height:92px;font-size:40px">🔊</button>`;
-  app.innerHTML=head()+`<div class="card" style="padding:20px 18px">${prompt}</div><div class="opts">${o.map((x,i)=>`<button class="opt" data-a="ans" data-i="${i}">${s.k==='A'?`<span>${x.em}</span><span>${esc(x.es)}</span>`:`<span>${esc(x.fr)}</span>`}</button>`).join('')}</div><div class="fb" id="fb"></div>`;
+    s.k==='S'?`<div class="q">¿Qué quiere decir esta frase?</div><div class="fr" style="font-size:25px">${esc(w.fr)}</div><button class="snd" data-a="say">🔊</button>`:
+    `<div class="q">${s.k==='L'?'Escucha la frase y elige 👂':'Escucha y elige 👂'}</div><button class="snd" data-a="say" style="width:92px;height:92px;font-size:40px">🔊</button>`;
+  const lab=x=>s.k==='A'?`<span>${x.em}</span><span>${esc(x.es)}</span>`:(s.k==='S'||s.k==='L')?`<span style="font-size:16.5px">${esc(x.es)}</span>`:`<span>${esc(x.fr)}</span>`;
+  app.innerHTML=head()+`<div class="card" style="padding:20px 18px">${prompt}</div><div class="opts">${o.map((x,i)=>`<button class="opt" data-a="ans" data-i="${i}">${lab(x)}</button>`).join('')}</div><div class="fb" id="fb"></div>`;
   if(s.k!=='B')say(w)}
 function answer(i){
   const s=Q.steps[Q.i];if(s.done)return;s.done=1;
-  const ok=s.o[i]===s.w,bt=[...document.querySelectorAll('.opt')];
+  const ok=s.o[i]===s.w,bt=[...document.querySelectorAll('.opt')],sen=s.k==='S'||s.k==='L';
   bt.forEach((b,j)=>{if(s.o[j]===s.w)b.classList.add('ok');else if(j===i)b.classList.add('no');else b.classList.add('dim')});
   if(s.k==='B'||!ok)say(s.w);
-  if(ok){if(!s.re)Q.pts+=10;$('#fb').innerHTML=`<div style="display:flex;align-items:center;justify-content:center;gap:10px;text-align:left">${coco('happy',62)}<span>${rnd(OKQ)}${s.re?'':' <span style="color:var(--pink)">+10 ⭐</span>'}</span></div>`;setTimeout(()=>{Q.i++;step()},s.k==='B'?1500:950)}
+  const row=(st,h)=>`<div style="display:flex;align-items:center;justify-content:center;gap:10px;text-align:left">${coco(st,62)}<span>${h}</span></div>`;
+  const sol=`<span style="color:var(--deep)">${esc(s.w.fr)} = ${esc(s.w.es)}</span>`;
+  if(Q.mode==='exam'){if(ok)Q.ok++;
+    $('#fb').innerHTML=ok?row('happy','¡Correcto! 🎓'):row('sad',sol)+'<button class="btn" data-a="next">Seguir</button>';
+    if(ok)setTimeout(()=>{Q.i++;step()},1000);return}
+  if(ok){if(!s.re)Q.pts+=10;if(sen)S.s[s.w.id]=(S.s[s.w.id]||0)+1;
+    $('#fb').innerHTML=row('happy',rnd(OKQ)+(s.re?'':' <span style="color:var(--pink)">+10 ⭐</span>'));setTimeout(()=>{Q.i++;step()},s.k==='B'||sen?1500:950)}
   else{Q.bad.add(s.w.id);if(!s.re)Q.steps.push({t:'q',k:s.k,w:s.w,re:1});
-    $('#fb').innerHTML=`<div style="display:flex;align-items:center;justify-content:center;gap:10px;text-align:left">${coco('sad',62)}<span>${rnd(NOQ)}<br><span style="color:var(--deep)">${esc(s.w.fr)} = ${esc(s.w.es)}</span></span></div><button class="btn" data-a="next">Seguir</button>`}}
+    $('#fb').innerHTML=row('sad',rnd(NOQ)+'<br>'+sol)+'<button class="btn" data-a="next">Seguir</button>'}}
+const confetti=()=>`<div class="conf">${Array.from({length:22},(_,i)=>`<i style="left:${Math.random()*100}%;animation-duration:${2+Math.random()*2.5}s;animation-delay:${Math.random()*.8}s">${rnd(['💖','✨','🎀','🍌','👑'])}</i>`).join('')}</div>`;
 function finish(){
   const t=day(),GAP=[1,2,4,7,14,30];
   Q.ws.forEach(w=>{const c=S.w[w.id]||{box:-1};c.box=Q.bad.has(w.id)?0:Math.min(c.box+1,5);c.due=addDays(GAP[c.box]);S.w[w.id]=c});
   if(S.last!==t){S.streak=S.last===addDays(-1)?(S.streak||0)+1:1;S.last=t;S.best=Math.max(S.best||0,S.streak)}
   if(S.phDay!==t){if(S.phDay)S.ph=(S.ph+1)%P.length;S.phDay=t}
   if(S.ptsDay!==t){S.ptsDay=t;S.ptsToday=0}
-  const before=S.pts,gain=Math.max(0,Math.min(Q.pts+50+Math.min(S.streak*5,50),DAYCAP-S.ptsToday));S.pts+=gain;S.ptsToday+=gain;
-  const won=G.filter(g=>before<g.p&&S.pts>=g.p).pop();
+  const gain=Math.max(0,Math.min(Q.pts+50+Math.min(S.streak*5,50),DAYCAP-S.ptsToday));S.pts+=gain;S.ptsToday+=gain;
   save();report();
-  const p=P[S.ph],n=learned().length;window._cur={t:'end',w:p};preload([p]);
-  app.innerHTML=`<div class="conf">${Array.from({length:22},(_,i)=>`<i style="left:${Math.random()*100}%;animation-duration:${2+Math.random()*2.5}s;animation-delay:${Math.random()*.8}s">${rnd(['💖','✨','🎀','🍌','👑'])}</i>`).join('')}</div>
-  <div class="top"><h1>¡Listo! 🎉</h1><div style="display:flex;gap:8px"><div class="pill">🔥 ${S.streak}</div><div class="pill">⭐ ${nf(S.pts)}</div></div></div>
-  <div class="plus">${gain?`+${gain} ⭐`:'Ya ganaste todos tus puntos de hoy ⭐'}</div>${won?`<button class="gift" data-a="regalos" style="margin-top:10px;border:3px solid var(--pink)"><span class="ge pop">${won.em}</span><span class="gt"><b class="n">🎉 ¡Regalo desbloqueado!</b><small style="font-size:15px">${esc(won.es)} — toca para pedírselo</small></span></button>`:''}
+  const p=P[S.ph];window._cur={t:'end',w:p};preload([p]);
+  app.innerHTML=confetti()+`<div class="top"><h1>¡Listo! 🎉</h1><div style="display:flex;gap:8px"><div class="pill">🔥 ${S.streak}</div><div class="pill">⭐ ${nf(S.pts)}</div></div></div>
+  <div class="plus">${gain?`+${gain} ⭐`:'Ya ganaste todos tus puntos de hoy ⭐'}</div>${canExam()?`<div style="margin-top:10px">${giftBar()}</div>`:''}
   <div style="text-align:center;margin-top:10px">${coco('party',104)}</div><div class="bub" style="margin:8px auto 0;text-align:center">${rnd(JOKES)}</div>
   <div class="card"><div class="q">Frase del día para tu gordito 💌</div><div class="fr" style="font-size:28px">${esc(p.fr)}</div><div class="es" style="font-size:17px">${esc(p.es)}</div><button class="snd" data-a="say">🔊</button></div>
   <div class="stack"><a class="btn wa" href="https://wa.me/?text=${encodeURIComponent(p.fr)}" target="_blank" rel="noopener">Mandársela por WhatsApp 💬</a><button class="btn alt" data-a="home">Volver</button></div>`}
+// ---------- examen del regalo ----------
+function exam(){
+  if(!canExam())return home();
+  const l=S.lv+1,n=l===LV.length?20:10,pick=shuf(examPool(l)).slice(0,n);
+  Q={steps:pick.map((w,i)=>({t:'q',k:i%3===2&&window.speechSynthesis?'L':'S',w})),i:0,ws:[],bad:new Set(),mode:'exam',pts:0,ok:0,need:Math.ceil(n*.8),lvl:l};step()}
+function examEnd(){
+  const pass=Q.ok>=Q.need,n=Q.steps.length,l=Q.lvl;window._cur=null;
+  if(pass){S.lv=l;S.pts+=100;save();report()}
+  app.innerHTML=pass?confetti()+`<div class="top"><h1>¡Aprobaste! 🎓</h1><div class="pill">${Q.ok} de ${n}</div></div>
+  <div style="text-align:center;margin-top:14px">${coco('party',120)}</div>
+  <div class="card"><div class="q">Regalo sorpresa nº ${l} desbloqueado</div><div class="pop" style="font-size:${60+l*12}px;line-height:1.2">🎁</div><div class="es">¡Ya entiendes frases en francés, mi reina! 👑</div></div>
+  <div class="stack"><a class="btn wa" data-a="claim" data-i="${l-1}" href="${waGift(l-1)}" target="_blank" rel="noopener">Pedírselo a mi gordito 💌</a><button class="btn alt" data-a="home">Volver</button></div>`
+  :`<div class="top"><h1>Casi… 🙈</h1><div class="pill">${Q.ok} de ${n}</div></div>
+  <div class="hero">${coco('sad',150)}<div class="bub">Sacaste <b>${Q.ok} de ${n}</b> y necesitas ${Q.need}.<br>Repasa un chin y vuelve a intentarlo: ¡tú puedes, mi amor! 💪</div></div>
+  <div class="stack"><button class="btn" data-a="play" data-m="rev">Repasar 🔁</button><button class="btn alt" data-a="home">Volver</button></div>`}
 function report(){try{fetch('/api/done',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({day:day(),streak:S.streak,learned:learned().length,total:W.length,pts:S.pts}),keepalive:true}).catch(()=>{})}catch(e){}}
 // ---------- words ----------
 function words(){
@@ -289,7 +323,8 @@ app.addEventListener('click',async e=>{
   else if(a==='words')words()
   else if(a==='avisos')avisos()
   else if(a==='regalos')regalos()
-  else if(a==='claim'){const i=+b.dataset.i;if(!S.claimed.includes(i)){S.claimed.push(i);save()}setTimeout(regalos,600)}
+  else if(a==='exam')exam()
+  else if(a==='claim'){const i=+b.dataset.i;if(!S.claimed.includes(i)){S.claimed.push(i);save()}setTimeout(home,600)}
   else if(a==='savesch')saveSch()
   else if(a==='hear')say(W.find(w=>w.id===b.dataset.id))
   else if(a==='push'){try{const ok=await subscribe(true);if(ok){toast('¡Avisos activados! 🔔');avisos()}}catch(err){toast('No se pudo activar: '+(err&&err.message||err))}}

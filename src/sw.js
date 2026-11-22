@@ -7,7 +7,7 @@ self.addEventListener('fetch',e=>{
   e.respondWith(fetch(e.request).then(r=>{if(r.ok){const c=r.clone();caches.open(C).then(k=>k.put(e.request,c))}return r}).catch(()=>caches.match(e.request,{ignoreSearch:true})));
 });
 self.addEventListener('push',e=>e.waitUntil((async()=>{
-  let d={title:'Coco 🐵',body:'Tus 2 minuticos de francés te esperan, mi amor. — Tu gordito'};
+  let d={title:'Coco 🐵',body:'Tus 5 minuticos de francés te esperan, mi amor. — Tu gordito'};
   try{const c=new AbortController();setTimeout(()=>c.abort(),5000);
     const r=await fetch('/api/notif',{signal:c.signal,cache:'no-store'});if(r.ok)d=await r.json()}catch(_){}
   await self.registration.showNotification(d.title,{body:d.body,icon:'/icon-512.png',data:{url:'/'}});

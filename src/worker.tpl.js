@@ -9,13 +9,13 @@ const ICONS={"/icon-180.png":"__I180__","/icon-512.png":"__I512__"};
 const MANIFEST=JSON.stringify({name:"AF · Francés con Coco",short_name:"AF",start_url:"/",scope:"/",display:"standalone",background_color:"#FFE3F1",theme_color:"#FFE3F1",lang:"es",
   icons:[{src:"/icon-180.png",sizes:"180x180",type:"image/png"},{src:"/icon-512.png",sizes:"512x512",type:"image/png",purpose:"any maskable"}]});
 const NOTIFS=[
- "Mi amor, Coco ya tiene tus 3 palabritas de hoy 🐵 Dos minuticos y ya. — Tu gordito",
- "Mi reina 👑 ¿2 minuticos de francés? Coco te está esperando. — Tu gordito",
+ "Mi amor, Coco ya tiene tus palabritas de hoy 🐵 Cinco minuticos y ya. — Tu gordito",
+ "Mi reina 👑 ¿5 minuticos de francés? Coco te está esperando. — Tu gordito",
  "Coco pregunta por ti 🍌 Ven a aprender algo bonito para decirme. — Tu gordito",
  "Mi vida, hoy toca frase nueva para tu gordito 💌 Entra un chin. — Tu gordito",
- "Princesa, tu mono favorito te guardó 3 palabras ✨ — Tu gordito",
+ "Princesa, tu mono favorito te guardó palabras nuevas ✨ — Tu gordito",
  "¡No dejes sola a Coco! 🙈 Un ratico de francés y a descansar. — Tu gordito",
- "Mi amor, tu racha te espera 🔥 Son solo 2 minuticos. — Tu gordito",
+ "Mi amor, tu racha te espera 🔥 Son solo 5 minuticos. — Tu gordito",
  "El alma de tu gordito quiere oírte hablar francés 😘 Entra con Coco. — Tu gordito"];
 const enc=new TextEncoder();
 const b64u=b=>{let s="";for(const c of new Uint8Array(b))s+=String.fromCharCode(c);return btoa(s).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"")};
