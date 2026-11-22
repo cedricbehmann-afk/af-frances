@@ -175,7 +175,7 @@ const iOS=/iphone|ipad|ipod/i.test(navigator.userAgent),standalone=matchMedia('(
 let instEv=null;window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();instEv=e;if(!Q||Q.i>=Q.steps.length)home()});
 function banner(){
   const inst=instEv&&!standalone?'<button class="btn alt" data-a="install">📲 Instalar la app<small>Para tenerla en tu pantalla</small></button>':'';
-  if(iOS&&!standalone)return `<div class="note">📲 <b>Pon a Coco en tu pantalla</b> (así te llegan los avisos):<br>1. Toca <b>Compartir</b> (el cuadrito con la flecha ↑) abajo en Safari<br>2. Elige <b>«Añadir a pantalla de inicio»</b><br>3. Abre la app desde el ícono rosado <b>AF</b> 🎀</div>`;
+  if(iOS&&!standalone)return `<div class="note">📲 <b>Pon la app en tu pantalla</b> (así te llegan los avisos):<br>1. Abre este enlace en la app <b>Safari</b> 🧭 (la brújula azul), no dentro de WhatsApp ni Instagram<br><button class="mini" data-a="copy" style="background:var(--pink);box-shadow:0 3px 0 var(--deep);margin:6px 0 8px">Copiar el enlace 🔗</button><br>2. Toca <b>Compartir</b> (el cuadrito con la flecha ↑). Si no lo ves, toca primero los <b>tres puntitos ···</b><br>3. Baja en la lista y toca <b>«Agregar a Inicio»</b> (también puede decir «Añadir a pantalla de inicio»)<br>4. Abre la app desde el ícono rosado <b>AF</b> 🎀</div>`;
   if(!('Notification'in window)||!('serviceWorker'in navigator))return inst;
   if(Notification.permission==='default')return `<button class="btn alt" data-a="push">🔔 Activar avisos<small>Un solo mensajito al día, prometido</small></button>`+inst;
   if(Notification.permission==='denied')return `<div class="note">🔕 Los avisos están apagados. Actívalos en Ajustes → Notificaciones → AF.</div>`;
@@ -322,6 +322,7 @@ app.addEventListener('click',async e=>{
   else if(a==='words')words()
   else if(a==='avisos')avisos()
   else if(a==='regalos')regalos()
+  else if(a==='copy'){const u=location.origin+'/';try{await navigator.clipboard.writeText(u);toast('¡Enlace copiado! Pégalo en Safari 🧭')}catch(e){toast(u)}}
   else if(a==='install'){if(instEv){instEv.prompt();instEv=null;setTimeout(home,800)}}
   else if(a==='exam')exam()
   else if(a==='claim'){const i=+b.dataset.i;if(!S.claimed.includes(i)){S.claimed.push(i);save()}setTimeout(home,600)}
