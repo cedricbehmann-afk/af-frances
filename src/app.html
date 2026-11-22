@@ -1,0 +1,253 @@
+<!doctype html><html lang="es"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>AF · Francés con Coco</title>
+<link rel="manifest" href="/manifest.webmanifest"><link rel="apple-touch-icon" href="/icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AF"><meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#FFE3F1">
+<style>
+:root{--bg:#FFE3F1;--pink:#FF2E93;--deep:#B8136F;--ink:#4A0D2E;--soft:#FFC2DF;--card:#fff;--ok:#12A873;--bad:#E5484D;--gold:#FFC83D}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}html{background:#FFF1F8}
+body{font-family:ui-rounded,"SF Pro Rounded","Nunito",system-ui,-apple-system,sans-serif;color:var(--ink);
+ background:radial-gradient(circle at 15% 8%,#fff 0 2px,transparent 3px),radial-gradient(circle at 82% 18%,#fff 0 3px,transparent 4px),radial-gradient(circle at 60% 4%,#fff 0 1.5px,transparent 2.5px),linear-gradient(180deg,#FFD0E8 0%,var(--bg) 38%,#FFF1F8 100%);background-attachment:fixed;
+ -webkit-user-select:none;user-select:none;overscroll-behavior:none}
+#app{max-width:480px;margin:0 auto;min-height:100%;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 14px) 18px calc(env(safe-area-inset-bottom) + 18px)}
+h1{font-size:26px;margin:0;font-weight:900;letter-spacing:-.5px;color:var(--deep)}
+.af{display:inline-grid;place-items:center;width:54px;height:54px;border-radius:50%;background:linear-gradient(160deg,#FF6FB8,var(--pink));color:#fff;font-style:italic;font-weight:900;font-size:24px;letter-spacing:-1px;box-shadow:0 4px 0 var(--deep);border:3px solid #fff}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.pill{background:#fff;border-radius:99px;padding:8px 14px;font-weight:800;font-size:15px;box-shadow:0 3px 0 var(--soft);white-space:nowrap}
+.hero{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:14px;padding:18px 0}
+.mk{display:inline-block;font-size:112px;line-height:1;position:relative;filter:drop-shadow(0 8px 0 rgba(184,19,111,.15));animation:bob 2.6s ease-in-out infinite}
+.mk i{position:absolute;font-style:normal;font-size:.4em;top:-.12em;right:-.08em;transform:rotate(18deg)}
+.mk.sm{font-size:56px;animation:none}
+@keyframes bob{50%{transform:translateY(-8px) rotate(-3deg)}}
+.bub{background:#fff;border-radius:22px;padding:14px 18px;font-size:17px;font-weight:700;line-height:1.35;box-shadow:0 4px 0 var(--soft);position:relative;max-width:340px}
+.bub:before{content:"";position:absolute;top:-9px;left:50%;margin-left:-10px;border:10px solid transparent;border-top:0;border-bottom-color:#fff}
+button{font:inherit;color:inherit;border:0;cursor:pointer}
+.btn{display:block;width:100%;background:var(--pink);color:#fff;font-weight:900;font-size:20px;padding:17px;border-radius:20px;box-shadow:0 6px 0 var(--deep);transition:transform .08s,box-shadow .08s;text-align:center;text-decoration:none}
+.btn:active{transform:translateY(4px);box-shadow:0 2px 0 var(--deep)}
+.btn.alt{background:#fff;color:var(--deep);box-shadow:0 6px 0 var(--soft)}
+.btn.wa{background:#1FAF5A;box-shadow:0 6px 0 #14803F}
+.btn small{display:block;font-size:13px;font-weight:700;opacity:.9}
+.link{background:none;color:var(--deep);font-weight:800;text-decoration:underline;padding:10px;font-size:15px}
+.stack{display:flex;flex-direction:column;gap:12px}
+.note{background:#fff;border:2px dashed var(--pink);border-radius:18px;padding:14px;font-size:15px;font-weight:600;line-height:1.4;text-align:left}
+.note b{color:var(--deep)}
+.bar{height:14px;background:#fff;border-radius:99px;overflow:hidden;flex:1;box-shadow:inset 0 0 0 2px var(--soft)}
+.bar b{display:block;height:100%;background:linear-gradient(90deg,var(--pink),#FF7AC0);border-radius:99px;transition:width .3s}
+.x{background:#fff;width:40px;height:40px;border-radius:50%;font-size:18px;font-weight:900;color:var(--deep);box-shadow:0 3px 0 var(--soft)}
+.card{background:var(--card);border-radius:28px;padding:26px 18px;text-align:center;box-shadow:0 6px 0 var(--soft);margin:18px 0}
+.big{font-size:76px;line-height:1.1}
+.fr{font-size:38px;font-weight:900;color:var(--pink);line-height:1.1;margin-top:8px;word-break:break-word}
+.es{font-size:21px;font-weight:800;margin-top:8px}
+.pr{display:inline-block;margin-top:12px;background:var(--bg);border-radius:12px;padding:6px 12px;font-size:15px;font-weight:700;color:var(--deep)}
+.snd{margin-top:16px;background:var(--gold);width:64px;height:64px;border-radius:50%;font-size:28px;box-shadow:0 5px 0 #D99A00}
+.snd:active{transform:translateY(3px);box-shadow:0 2px 0 #D99A00}
+.q{font-size:15px;font-weight:800;color:var(--deep);text-transform:uppercase;letter-spacing:.5px}
+.opts{display:grid;gap:11px}
+.opt{background:#fff;border-radius:18px;padding:16px;font-size:19px;font-weight:800;box-shadow:0 5px 0 var(--soft);text-align:left;display:flex;gap:10px;align-items:center;min-height:60px}
+.opt:active{transform:translateY(3px);box-shadow:0 2px 0 var(--soft)}
+.opt.ok{background:var(--ok);color:#fff;box-shadow:0 5px 0 #0B7A53}
+.opt.no{background:var(--bad);color:#fff;box-shadow:0 5px 0 #A82A2E;animation:shake .35s}
+.opt.dim{opacity:.45}
+@keyframes shake{25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.fb{min-height:74px;margin-top:14px;font-weight:800;font-size:16px;text-align:center;display:flex;flex-direction:column;gap:10px;justify-content:center}
+.grow{flex:1}
+.gift{width:100%;background:#fff;border-radius:20px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 0 var(--soft);text-align:left}
+.gift .ge{font-size:38px}.gift .gt{flex:1;min-width:0}.gift b.n{display:block;font-size:15px;margin-bottom:6px}.gift small{font-weight:700;font-size:12.5px;color:var(--deep)}
+.tier{background:#fff;border-radius:22px;padding:14px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 0 var(--soft)}
+.tier .ge{width:84px;text-align:center;line-height:1}.tier .gt{flex:1;min-width:0}.tier .gt b{display:block;font-size:17px;line-height:1.2}.tier .gt span{font-size:13px;font-weight:800;color:var(--deep)}
+.tier.lock{opacity:.62}.tier.lock .ge{filter:grayscale(.7)}
+.mini{display:inline-block;margin-top:8px;background:#1FAF5A;color:#fff;font-weight:900;font-size:14px;padding:9px 12px;border-radius:12px;box-shadow:0 3px 0 #14803F;text-decoration:none}
+.plus{font-size:30px;font-weight:900;color:var(--pink);text-align:center;margin-top:6px}
+select{font:inherit;font-weight:800;color:var(--deep);background:var(--bg);border:2px solid var(--soft);border-radius:12px;padding:9px 8px;max-width:150px}
+.day{background:#fff;border-radius:16px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 3px 0 var(--soft);font-weight:800;font-size:17px}
+.day.g{background:var(--pink);color:#fff;box-shadow:0 3px 0 var(--deep)}
+.list{display:grid;gap:9px;margin:14px 0}
+.row{background:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;gap:12px;box-shadow:0 3px 0 var(--soft);text-align:left;width:100%}
+.row .e{font-size:28px}.row .t{flex:1}.row .t b{display:block;font-size:18px;color:var(--pink)}.row .t span{font-size:14px;font-weight:700}
+.row .lv{font-size:12px}
+.conf{position:fixed;inset:0;pointer-events:none;overflow:hidden}
+.conf i{position:absolute;top:-40px;font-style:normal;font-size:26px;animation:fall linear forwards}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg)}}
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 24px);transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:99px;font-weight:700;font-size:14px;z-index:9}
+</style></head><body><div id="app"></div>
+<script>
+/*DATA*/
+const $=s=>document.querySelector(s),app=$('#app');
+const MK='<div class="mk">🐵<i>🎀</i></div>',MKS='<div class="mk sm">🐵<i>🎀</i></div>';
+const day=(d=new Date())=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return day(d)};
+const rnd=a=>a[Math.floor(Math.random()*a.length)];
+const shuf=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S={w:{},streak:0,last:'',ph:0,phDay:'',best:0,pts:0,ptsDay:'',ptsToday:0,claimed:[]};
+try{S=Object.assign(S,JSON.parse(localStorage.getItem('coco')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('coco',JSON.stringify(S))}catch(e){}};
+const learned=()=>W.filter(w=>S.w[w.id]);
+let CFG={vapid:'',voices:[]};
+const OKQ=['¡Eso, mi reina! 👑','¡Guau! Coco aplaude con las patas 🐵','¡Más lista que un mono con dos guineos! 🍌','¡Perfecto! Tu gordito va a presumir 😎','¡Oui oui oui! ✨','¡Ni Coco lo dice tan bonito! 💖'];
+const NOQ=['Ups… hasta Coco se resbala con la cáscara 🍌','Casi, casi 🙈 ¡la próxima es tuya!','Tranquila, a Coco le tomó 3 años decir «banane» 🐒','No pasa nada, mi amor. Otra vez 💪'];
+const JOKES=['¿Qué hace un mono en la escuela? ¡Monerías! 🙊','Coco dice: «Hablar francés es fácil… ¡lo difícil es pelar el guineo con guantes!» 🍌','¿Cuál es el colmo de un mono? Que le digan «¡qué mono!» y no entienda 🙈','Coco ya le contó a toda la selva lo bien que vas 🌴'];
+// ---------- regalos (cada vez más grandes) ----------
+const G=[300,800,1800,3500,6000,10000].map((p,i)=>({p,em:'🎁',es:'Regalo sorpresa nº '+(i+1),fr:'mon cadeau surprise numéro '+(i+1)}));
+const DAYCAP=250,nf=n=>String(n).replace(/\B(?=(\d{3})+$)/g,',');
+function giftBar(){
+  const i=G.findIndex(g=>S.pts<g.p);if(i<0)return `<button class="gift" data-a="regalos"><span class="ge">👑</span><span class="gt"><b class="n">¡Ganaste todos los regalos!</b><small>Míralos aquí</small></span></button>`;
+  const g=G[i],a=i?G[i-1].p:0,pend=G.filter((x,j)=>S.pts>=x.p&&!S.claimed.includes(j)).length;
+  return `<button class="gift" data-a="regalos"><span class="ge">${g.em}</span><span class="gt"><b class="n">${pend?'🎉 ¡Tienes un regalo por pedir!':'Próximo regalo sorpresa 🤫'}</b><div class="bar"><b style="width:${Math.max(4,Math.round((S.pts-a)/(g.p-a)*100))}%"></b></div><small>Te faltan ${nf(g.p-S.pts)} ⭐</small></span></button>`}
+function regalos(){
+  window._cur=null;
+  app.innerHTML=`<div class="top"><button class="x" data-a="home">←</button><h1>Mis regalos 🎁</h1><div class="pill">⭐ ${nf(S.pts)}</div></div>
+  <div class="bub" style="margin:16px auto 0;text-align:center">Cada punto te acerca a un regalo de tu gordito… ¿Qué hay adentro? Sorpresa 🤫 Solo te digo que cada uno es más grande que el anterior 😍</div>
+  <div class="list">${G.map((g,i)=>{const ok=S.pts>=g.p,cl=S.claimed.includes(i);
+    return `<div class="tier${ok?'':' lock'}"><span class="ge" style="font-size:${26+i*10}px">${g.em}</span><span class="gt"><b>${esc(g.es)}</b><span>${ok?(cl?'✔ Ya se lo pediste':'¡Desbloqueado! 🎉'):'🔒 '+nf(g.p)+' ⭐ · te faltan '+nf(g.p-S.pts)}</span>${ok&&!cl?`<br><a class="mini" data-a="claim" data-i="${i}" href="https://wa.me/?text=${encodeURIComponent('Mon amour, j\'ai gagné '+g.fr+' '+g.em)}" target="_blank" rel="noopener">Pedírselo a mi gordito 💌</a>`:''}</span></div>`}).join('')}</div>
+  <div class="note">⭐ <b>¿Cómo gano puntos?</b><br>+10 por cada respuesta buena a la primera<br>+50 por terminar tu rondita<br>+ un bono por tu racha 🔥 (¡no la rompas!)</div>`;scrollTo(0,0)}
+// ---------- audio ----------
+const blobs={};let frVoice=null;
+function pickVoice(){const v=(window.speechSynthesis?speechSynthesis.getVoices():[]).filter(v=>/^fr/i.test(v.lang));frVoice=v.find(v=>/fr[-_]FR/i.test(v.lang))||v[0]||null}
+if(window.speechSynthesis){pickVoice();speechSynthesis.onvoiceschanged=pickVoice}
+const clean=t=>t.replace(/[^\p{L}\p{N}\s'’?!….,-]/gu,'').trim();
+async function say(o){
+  try{
+    if(CFG.voices.includes(o.id)){
+      if(!blobs[o.id]){const r=await fetch('/api/voice/'+o.id);if(!r.ok)throw 0;blobs[o.id]=URL.createObjectURL(await r.blob())}
+      const a=new Audio(blobs[o.id]);await a.play();return}
+  }catch(e){}
+  if(!window.speechSynthesis)return;
+  speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(clean(o.fr));u.lang='fr-FR';if(frVoice)u.voice=frVoice;u.rate=.8;speechSynthesis.speak(u)}
+// preload his voice for the words of a session so playback stays inside the tap
+function preload(ws){ws.forEach(o=>{if(CFG.voices.includes(o.id)&&!blobs[o.id])fetch('/api/voice/'+o.id).then(r=>r.ok?r.blob():0).then(b=>{if(b)blobs[o.id]=URL.createObjectURL(b)}).catch(()=>{})})}
+// ---------- home ----------
+const iOS=/iphone|ipad|ipod/i.test(navigator.userAgent),standalone=matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+function banner(){
+  if(iOS&&!standalone)return `<div class="note">📲 <b>Pon a Coco en tu pantalla</b> (así te llegan los avisos):<br>1. Toca <b>Compartir</b> (el cuadrito con la flecha ↑) abajo en Safari<br>2. Elige <b>«Añadir a pantalla de inicio»</b><br>3. Abre la app desde el ícono rosado <b>AF</b> 🎀</div>`;
+  if(!('Notification'in window)||!('serviceWorker'in navigator))return '';
+  if(Notification.permission==='default')return `<button class="btn alt" data-a="push">🔔 Activar avisos<small>Un solo mensajito al día, prometido</small></button>`;
+  if(Notification.permission==='denied')return `<div class="note">🔕 Los avisos están apagados. Actívalos en Ajustes → Notificaciones → AF.</div>`;
+  return ''}
+function home(){
+  const n=learned().length,done=S.last===day(),first=!n;
+  const msg=first?'¡Hola, Ana! Soy <b>Coco</b>. Tu gordito me mandó a enseñarte francés 💖<br>Dos minuticos al día y ya.':
+    done?'¡Ya cumpliste hoy, mi reina! 👑<br>Nos vemos mañana… o juega otra si te quedaste con ganas.':
+    rnd(['¡Llegaste! Coco ya tiene tus 3 palabritas de hoy ✨','Dos minuticos y a lo tuyo, mi amor 💅','Hoy vas a dejar a tu gordito con la boca abierta 😘']);
+  app.innerHTML=`<div class="top"><h1 style="display:flex;align-items:center;gap:10px"><span class="af">AF</span><span style="font-size:17px">Francés con Coco</span></h1><div style="display:flex;gap:8px"><div class="pill">🔥 ${S.streak||0}</div><div class="pill">⭐ ${nf(S.pts)}</div></div></div>
+  <div class="hero">${MK}<div class="bub">${msg}</div></div>
+  <div class="stack">${giftBar()}${done?`<button class="btn" data-a="play" data-m="rev">Otra rondita 🔁<small>Repaso rápido</small></button>${n<W.length?'<button class="link" data-a="play" data-m="more">Quiero 3 palabras nuevas más</button>':''}`
+   :`<button class="btn" data-a="play" data-m="day">${first?'Empezar':'Jugar'} 💖<small>2 minuticos</small></button>`}
+  ${banner()}<div style="display:flex;justify-content:center;gap:6px">${n?'<button class="link" data-a="words">Mis palabras 💎</button>':''}${canPush()?'<button class="link" data-a="avisos">Mis avisos 🔔</button>':''}</div></div>`}
+// ---------- session ----------
+let Q=null;
+function build(mode){
+  const seen=learned(),t=day();
+  let nw=mode==='rev'?[]:W.filter(w=>!S.w[w.id]).slice(0,3);
+  const due=seen.slice().sort((a,b)=>(S.w[a.id].due>t)-(S.w[b.id].due>t)||S.w[a.id].box-S.w[b.id].box||(S.w[a.id].due<S.w[b.id].due?-1:1));
+  const rv=due.slice(0,nw.length?2:5);
+  const steps=[];
+  nw.forEach(w=>{steps.push({t:'i',w});steps.push({t:'q',k:'A',w})});
+  const mix=[];nw.forEach(w=>mix.push({t:'q',k:'B',w}));
+  rv.forEach(w=>{mix.push({t:'q',k:rnd(['C','B','A']),w})});
+  if(!nw.length)rv.forEach(w=>mix.push({t:'q',k:'A',w}));
+  steps.push(...shuf(mix));
+  Q={steps,i:0,total:steps.length,ws:[...nw,...rv],bad:new Set(),mode,pts:0};preload(Q.ws)}
+function opts(w,k){
+  const idx=W.indexOf(w),lim=Math.max(12,learned().length+6);
+  const pool=W.slice(0,lim).filter(x=>x!==w&&x.es!==w.es&&x.fr!==w.fr);
+  return shuf([w,...shuf(pool).slice(0,3)])}
+function head(){return `<div class="top"><button class="x" data-a="quit">✕</button><div class="bar"><b style="width:${Math.round(Q.i/Q.steps.length*100)}%"></b></div></div>`}
+function step(){
+  if(Q.i>=Q.steps.length)return finish();
+  const s=Q.steps[Q.i],w=s.w;window._cur=s;
+  if(s.t==='i'){
+    app.innerHTML=head()+`<div class="grow"><div class="card"><div class="q">Palabra nueva ✨</div><div class="big">${w.em}</div><div class="fr">${esc(w.fr)}</div><div class="es">${esc(w.es)}</div><div class="pr">se dice «${esc(w.pr)}»</div><br><button class="snd" data-a="say">🔊</button></div></div><button class="btn" data-a="next">¡La tengo! 💅</button>`;
+    say(w);return}
+  const o=opts(w,s.k);s.o=o;
+  const prompt=s.k==='A'?`<div class="q">¿Qué significa?</div><div class="fr">${esc(w.fr)}</div><button class="snd" data-a="say">🔊</button>`:
+    s.k==='B'?`<div class="q">¿Cómo se dice en francés?</div><div class="big">${w.em}</div><div class="es">${esc(w.es)}</div>`:
+    `<div class="q">Escucha y elige 👂</div><button class="snd" data-a="say" style="width:92px;height:92px;font-size:40px">🔊</button>`;
+  app.innerHTML=head()+`<div class="card" style="padding:20px 18px">${prompt}</div><div class="opts">${o.map((x,i)=>`<button class="opt" data-a="ans" data-i="${i}">${s.k==='A'?`<span>${x.em}</span><span>${esc(x.es)}</span>`:`<span>${esc(x.fr)}</span>`}</button>`).join('')}</div><div class="fb" id="fb"></div>`;
+  if(s.k!=='B')say(w)}
+function answer(i){
+  const s=Q.steps[Q.i];if(s.done)return;s.done=1;
+  const ok=s.o[i]===s.w,bt=[...document.querySelectorAll('.opt')];
+  bt.forEach((b,j)=>{if(s.o[j]===s.w)b.classList.add('ok');else if(j===i)b.classList.add('no');else b.classList.add('dim')});
+  if(s.k==='B'||!ok)say(s.w);
+  if(ok){if(!s.re)Q.pts+=10;$('#fb').innerHTML=`<div>${rnd(OKQ)}${s.re?'':' <span style="color:var(--pink)">+10 ⭐</span>'}</div>`;setTimeout(()=>{Q.i++;step()},s.k==='B'?1500:950)}
+  else{Q.bad.add(s.w.id);if(!s.re)Q.steps.push({t:'q',k:s.k,w:s.w,re:1});
+    $('#fb').innerHTML=`<div>${rnd(NOQ)}<br><span style="color:var(--deep)">${esc(s.w.fr)} = ${esc(s.w.es)}</span></div><button class="btn" data-a="next">Seguir</button>`}}
+function finish(){
+  const t=day(),GAP=[1,2,4,7,14,30];
+  Q.ws.forEach(w=>{const c=S.w[w.id]||{box:-1};c.box=Q.bad.has(w.id)?0:Math.min(c.box+1,5);c.due=addDays(GAP[c.box]);S.w[w.id]=c});
+  if(S.last!==t){S.streak=S.last===addDays(-1)?(S.streak||0)+1:1;S.last=t;S.best=Math.max(S.best||0,S.streak)}
+  if(S.phDay!==t){if(S.phDay)S.ph=(S.ph+1)%P.length;S.phDay=t}
+  if(S.ptsDay!==t){S.ptsDay=t;S.ptsToday=0}
+  const before=S.pts,gain=Math.max(0,Math.min(Q.pts+50+Math.min(S.streak*5,50),DAYCAP-S.ptsToday));S.pts+=gain;S.ptsToday+=gain;
+  const won=G.filter(g=>before<g.p&&S.pts>=g.p).pop();
+  save();report();
+  const p=P[S.ph],n=learned().length;window._cur={t:'end',w:p};preload([p]);
+  app.innerHTML=`<div class="conf">${Array.from({length:22},(_,i)=>`<i style="left:${Math.random()*100}%;animation-duration:${2+Math.random()*2.5}s;animation-delay:${Math.random()*.8}s">${rnd(['💖','✨','🎀','🍌','👑'])}</i>`).join('')}</div>
+  <div class="top"><h1>¡Listo! 🎉</h1><div style="display:flex;gap:8px"><div class="pill">🔥 ${S.streak}</div><div class="pill">⭐ ${nf(S.pts)}</div></div></div>
+  <div class="plus">${gain?`+${gain} ⭐`:'Ya ganaste todos tus puntos de hoy ⭐'}</div>${won?`<button class="gift" data-a="regalos" style="margin-top:10px;border:3px solid var(--pink)"><span class="ge">${won.em}</span><span class="gt"><b class="n">🎉 ¡Regalo desbloqueado!</b><small style="font-size:15px">${esc(won.es)} — toca para pedírselo</small></span></button>`:''}
+  <div style="text-align:center;margin-top:10px">${MKS}</div><div class="bub" style="margin:8px auto 0;text-align:center">${rnd(JOKES)}</div>
+  <div class="card"><div class="q">Frase del día para tu gordito 💌</div><div class="fr" style="font-size:28px">${esc(p.fr)}</div><div class="es" style="font-size:17px">${esc(p.es)}</div><button class="snd" data-a="say">🔊</button></div>
+  <div class="stack"><a class="btn wa" href="https://wa.me/?text=${encodeURIComponent(p.fr)}" target="_blank" rel="noopener">Mandársela por WhatsApp 💬</a><button class="btn alt" data-a="home">Volver</button></div>`}
+function report(){try{fetch('/api/done',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({day:day(),streak:S.streak,learned:learned().length,total:W.length,pts:S.pts}),keepalive:true}).catch(()=>{})}catch(e){}}
+// ---------- words ----------
+function words(){
+  const l=learned();window._cur=null;
+  app.innerHTML=`<div class="top"><button class="x" data-a="home">←</button><h1>Mis palabras 💎</h1><div class="pill">${l.length}</div></div>
+  <div class="list">${l.map(w=>`<button class="row" data-a="hear" data-id="${w.id}"><span class="e">${w.em}</span><span class="t"><b>${esc(w.fr)}</b><span>${esc(w.es)}</span></span><span class="lv">${'💖'.repeat(Math.max(1,Math.min(3,Math.ceil((S.w[w.id].box+1)/2))))}</span><span>🔊</span></button>`).join('')}</div>`;scrollTo(0,0)}
+// ---------- avisos ----------
+const DN=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'],TIMES=[];
+for(let h=5;h<24;h++)for(const m of['00','30'])TIMES.push(String(h).padStart(2,'0')+':'+m);
+const f12=t=>{const h=+t.slice(0,2);return (h%12||12)+':'+t.slice(3)+(h<12?' a. m.':' p. m.')};
+const sch=()=>Array.isArray(S.sch)&&S.sch.length===7?S.sch:['11:30','19:30','19:30','19:30','19:30','19:30','11:30'];
+const canPush=()=>'Notification'in window&&Notification.permission==='granted';
+const pick=(k,v,grp)=>`<select data-s="${k}">${grp?'<option value="">Elegir…</option>':''}${TIMES.map(t=>`<option value="${t}"${t===v?' selected':''}>${f12(t)}</option>`).join('')}<option value="off"${v==='off'?' selected':''}>Sin aviso</option></select>`;
+function avisos(){
+  const d=sch();window._cur=null;
+  app.innerHTML=`<div class="top"><button class="x" data-a="home">←</button><h1>Mis avisos 🔔</h1><span style="width:40px"></span></div>
+  <div style="text-align:center;margin-top:12px">${MKS}</div><div class="bub" style="margin:8px auto 0;text-align:center">¿A qué hora quieres que te avise? Tú mandas, mi reina 👑<br>Si ya jugaste ese día, no te molesto.</div>
+  <div class="list"><div class="day g"><span>Lunes a viernes</span>${pick('wk','',1)}</div><div class="day g"><span>Sábado y domingo</span>${pick('we','',1)}</div></div>
+  <div class="q" style="text-align:center">O día por día</div>
+  <div class="list">${[1,2,3,4,5,6,0].map(i=>`<div class="day"><span>${DN[i]}</span>${pick('d'+i,d[i])}</div>`).join('')}</div>
+  <button class="btn" data-a="savesch">Guardar 💖</button>`;scrollTo(0,0)}
+app.addEventListener('change',e=>{const k=e.target.dataset.s,v=e.target.value;if(!v||!k)return;
+  (k==='wk'?[1,2,3,4,5]:k==='we'?[6,0]:[]).forEach(i=>{document.querySelector(`[data-s="d${i}"]`).value=v})});
+async function saveSch(){
+  S.sch=[0,1,2,3,4,5,6].map(i=>document.querySelector(`[data-s="d${i}"]`).value);save();
+  try{const r=await fetch('/api/schedule',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({days:S.sch,tz:new Date().getTimezoneOffset()})});
+    if(!r.ok)throw 0;toast('¡Guardado! Coco te avisa a tu hora 🐵');home()}catch(e){toast('No se pudo guardar. Revisa tu internet e intenta otra vez.')}}
+// ---------- push ----------
+const b64=s=>Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+function toast(t){const d=document.createElement('div');d.className='toast';d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),3200)}
+async function subscribe(ask){
+  if(!('serviceWorker'in navigator)||!('PushManager'in window)||!CFG.vapid)return false;
+  if(ask){const p=await Notification.requestPermission();if(p!=='granted'){home();return false}}
+  if(Notification.permission!=='granted')return false;
+  const reg=await navigator.serviceWorker.ready;
+  let sub=await reg.pushManager.getSubscription();
+  if(!sub)sub=await reg.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:b64(CFG.vapid)});
+  const r=await fetch('/api/subscribe',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(sub)});
+  return r.ok}
+// ---------- events ----------
+app.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-a]');if(!b)return;const a=b.dataset.a;
+  if(a==='play'){build(b.dataset.m);if(!Q.steps.length){toast('Todavía no hay nada que repasar 🐵');return}step()}
+  else if(a==='next'){Q.i++;step()}
+  else if(a==='say'){if(window._cur)say(window._cur.w)}
+  else if(a==='ans')answer(+b.dataset.i)
+  else if(a==='quit'||a==='home')home()
+  else if(a==='words')words()
+  else if(a==='avisos')avisos()
+  else if(a==='regalos')regalos()
+  else if(a==='claim'){const i=+b.dataset.i;if(!S.claimed.includes(i)){S.claimed.push(i);save()}setTimeout(regalos,600)}
+  else if(a==='savesch')saveSch()
+  else if(a==='hear')say(W.find(w=>w.id===b.dataset.id))
+  else if(a==='push'){try{const ok=await subscribe(true);if(ok){toast('¡Avisos activados! 🔔');avisos()}}catch(err){toast('No se pudo activar: '+(err&&err.message||err))}}
+});
+home();
+if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});
+fetch('/api/config').then(r=>r.json()).then(c=>{CFG=c;subscribe(false).catch(()=>{})}).catch(()=>{});
+</script></body></html>
